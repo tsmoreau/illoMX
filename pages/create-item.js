@@ -83,21 +83,21 @@ export default function CreateItem() {
     <div className="flex justify-center">
       <div className="w-1/2 flex flex-col pb-12">
         <input
-          placeholder="Asset Name"
+          placeholder="name"
           className="mt-8 border rounded p-4"
           onChange={(e) =>
             updateFormInput({ ...formInput, name: e.target.value })
           }
         />
         <textarea
-          placeholder="Asset Description"
+          placeholder="description"
           className="mt-2 border rounded p-4"
           onChange={(e) =>
             updateFormInput({ ...formInput, description: e.target.value })
           }
         />
         <input
-          placeholder="Asset Price in XTO"
+          placeholder="list price in XTO"
           className="mt-2 border rounded p-4"
           onChange={(e) =>
             updateFormInput({ ...formInput, price: e.target.value })
@@ -107,9 +107,9 @@ export default function CreateItem() {
         {fileUrl && <img className="rounded mt-4" width="350" src={fileUrl} />}
         <button
           onClick={createMarket}
-          className="font-bold mt-4 bg-pink-500 text-white rounded p-4 shadow-lg"
+          className="font-bold mt-4 bg-green-700 text-white rounded p-4 shadow-lg"
         >
-          Create Digital Asset
+          mint NFT
         </button>
       </div>
     </div>

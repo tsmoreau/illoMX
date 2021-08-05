@@ -19,7 +19,7 @@ export default function CreatorDashboard() {
   async function loadNFTs() {
     const web3Modal = new Web3Modal({
       network: "mainnet",
-      cacheProvider: true,
+      cacheProvider: true
     });
     const connection = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(connection);
@@ -44,7 +44,7 @@ export default function CreatorDashboard() {
           seller: i.seller,
           owner: i.owner,
           sold: i.sold,
-          image: meta.data.image,
+          image: meta.data.image
         };
         return item;
       })
@@ -60,14 +60,14 @@ export default function CreatorDashboard() {
   return (
     <div>
       <div className="p-4">
-        <h2 className="text-2xl py-2">Items Created</h2>
+        <h2 className="text-2xl py-2">items created</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
           {nfts.map((nft, i) => (
             <div key={i} className="border shadow rounded-xl overflow-hidden">
               <img src={nft.image} className="rounded" />
               <div className="p-4 bg-black">
                 <p className="text-2xl font-bold text-white">
-                  Price - {nft.price} Eth
+                  Price - {nft.price} XTO
                 </p>
               </div>
             </div>
@@ -77,7 +77,7 @@ export default function CreatorDashboard() {
       <div className="px-4">
         {Boolean(sold.length) && (
           <div>
-            <h2 className="text-2xl py-2">Items sold</h2>
+            <h2 className="text-2xl py-2">items sold</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
               {sold.map((nft, i) => (
                 <div
@@ -87,7 +87,7 @@ export default function CreatorDashboard() {
                   <img src={nft.image} className="rounded" />
                   <div className="p-4 bg-black">
                     <p className="text-2xl font-bold text-white">
-                      Price - {nft.price} Eth
+                      Price - {nft.price} XTO
                     </p>
                   </div>
                 </div>
