@@ -18,7 +18,7 @@ export default function MyAssets() {
   async function loadNFTs() {
     const web3Modal = new Web3Modal({
       network: "mainnet",
-      cacheProvider: true,
+      cacheProvider: true
     });
     const connection = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(connection);
@@ -42,7 +42,7 @@ export default function MyAssets() {
           tokenId: i.tokenId.toNumber(),
           seller: i.seller,
           owner: i.owner,
-          image: meta.data.image,
+          image: meta.data.image
         };
         return item;
       })
@@ -51,7 +51,7 @@ export default function MyAssets() {
     setLoadingState("loaded");
   }
   if (loadingState === "loaded" && !nfts.length)
-    return <h1 className="py-10 px-20 text-3xl">No assets owned</h1>;
+    return <h1 className="py-10 px-20 text-3xl">no items owned</h1>;
   return (
     <div className="flex justify-center">
       <div className="p-4">

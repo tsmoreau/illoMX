@@ -29,6 +29,7 @@ function MyApp({ Component, pageProps }) {
               create NFT
             </a>
           </Link>
+
           <Link href="/creator-dashboard">
             <a className="mr-6 text-green-700 tracking-tight text-semi-bold">
               dashboard

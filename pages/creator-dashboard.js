@@ -11,6 +11,7 @@ import NFT from "../artifacts/contracts/NFT.sol/NFT.json";
 
 export default function CreatorDashboard() {
   const [nfts, setNfts] = useState([]);
+  const [mynfts, setMyNfts] = useState([]);
   const [sold, setSold] = useState([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function CreatorDashboard() {
     );
     const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
     const data = await marketContract.fetchItemsCreated();
+    const mydata = await marketContract.fetchMyNFTs();
 
     const items = await Promise.all(
       data.map(async (i) => {
@@ -44,19 +46,41 @@ export default function CreatorDashboard() {
           seller: i.seller,
           owner: i.owner,
           sold: i.sold,
-          image: meta.data.image
+          image: meta.data.image,
+          name: meta.data.name,
+          description: meta.data.description
         };
         return item;
       })
     );
+
+    const itemsBought = await Promise.all(
+      mydata.map(async (ii) => {
+        const tokenUri = await tokenContract.tokenURI(ii.tokenId);
+        const meta = await axios.get(tokenUri);
+        let price = ethers.utils.formatUnits(ii.price.toString(), "ether");
+        let item = {
+          price,
+          tokenId: ii.tokenId.toNumber(),
+          seller: ii.seller,
+          owner: ii.owner,
+          image: meta.data.image,
+          name: meta.data.name,
+          description: meta.data.description
+        };
+        return item;
+      })
+    );
+
     /* create a filtered array of items that have been sold */
     const soldItems = items.filter((i) => i.sold);
     setSold(soldItems);
     setNfts(items);
+    setMyNfts(itemsBought);
     setLoadingState("loaded");
   }
   if (loadingState === "loaded" && !nfts.length)
-    return <h1 className="py-10 px-20 text-3xl">No assets created</h1>;
+    return <h1 className="py-10 px-20 text-3xl">no items created/bought</h1>;
   return (
     <div>
       <div className="p-4">
@@ -66,14 +90,16 @@ export default function CreatorDashboard() {
             <div key={i} className="border shadow rounded-xl overflow-hidden">
               <img src={nft.image} className="rounded" />
               <div className="p-4 bg-black">
-                <p className="text-2xl font-bold text-white">
-                  price - {nft.price} XTO
-                </p>
+                <p className="text-2xl font-bold text-white">{nft.name}</p>
+                <span className="pl-1 text-sm font-normal tracking-tight text-gray-400">
+                  {nft.description}
+                </span>
               </div>
             </div>
           ))}
         </div>
       </div>
+
       <div className="px-4">
         {Boolean(sold.length) && (
           <div>
@@ -86,9 +112,34 @@ export default function CreatorDashboard() {
                 >
                   <img src={nft.image} className="rounded" />
                   <div className="p-4 bg-black">
-                    <p className="text-2xl font-bold text-white">
-                      price - {nft.price} XTO
-                    </p>
+                    <p className="text-2xl font-bold text-white">price</p>
+                    <span className="pl-1 text-sm font-normal tracking-tight text-gray-400">
+                      {nft.price}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="px-4">
+        {Boolean(sold.length) && (
+          <div>
+            <h2 className="text-2xl py-2">items bought</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+              {mynfts.map((nft, ii) => (
+                <div
+                  key={ii}
+                  className="border shadow rounded-xl overflow-hidden"
+                >
+                  <img src={nft.image} className="rounded" />
+                  <div className="p-4 bg-black">
+                    <p className="text-2xl font-bold text-white">creator</p>
+                    <span className="pl-1 text-sm font-normal tracking-tight text-gray-400">
+                      {nft.seller}
+                    </span>
                   </div>
                 </div>
               ))}
